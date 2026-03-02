@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Our Work — True Chaos Creative Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Playfair+Display:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --cream: #EDEAD8;
+      --black: #0E0D0B;
+      --rust: #B33018;
+      --cream-dim: rgba(237,234,216,0.55);
+      --cream-faint: rgba(237,234,216,0.07);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--cream);
+      color: var(--black);
+      font-family: 'Barlow', sans-serif;
+      overflow-x: hidden;
+      cursor: none;
+    }
+
+    /* Grain */
+    body::after {
+      content: '';
+      position: fixed; inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none; z-index: 9000; opacity: 0.35;
+    }
+
+    /* Cursor */
+    .cursor {
+      position: fixed; width: 10px; height: 10px;
+      background: var(--rust); border-radius: 50%;
+      pointer-events: none; z-index: 9999;
+      transform: translate(-50%,-50%);
+      transition: width .2s, height .2s, background .2s;
+    }
+    .cursor-ring {
+      position: fixed; width: 32px; height: 32px;
+      border: 1.5px solid rgba(179,48,24,.55);
+      border-radius: 50%; pointer-events: none; z-index: 9998;
+      transform: translate(-50%,-50%);
+      transition: width .2s, height .2s, border-color .2s;
+    }
+    /* "VIEW" label on card hover */
+    .cursor-label {
+      position: fixed; z-index: 9997;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: .75rem; letter-spacing: .2em;
+      color: var(--cream); background: var(--rust);
+      padding: 4px 10px;
+      pointer-events: none;
+      transform: translate(16px,-50%);
+      opacity: 0; transition: opacity .2s;
+      white-space: nowrap;
+    }
+    .cursor-label.show { opacity: 1; }
+
+    /* ══════════════════════
+       NAV
+    ══════════════════════ */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 500;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 48px;
+      background: rgba(237,234,216,.9);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(14,13,11,.07);
+    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo-text { font-family:'Bebas Neue',sans-serif; font-size:1.2rem; letter-spacing:.1em; color:var(--black); line-height:1; }
+    .nav-logo-sub { font-size:.52rem; letter-spacing:.25em; color:var(--rust); text-transform:uppercase; display:block; }
+    .nav-links { display:flex; gap:36px; list-style:none; }
+    .nav-links a {
+      text-decoration:none; font-size:.68rem; letter-spacing:.2em; text-transform:uppercase;
+      color:rgba(14,13,11,.45); font-weight:600; transition:color .2s; position:relative;
+    }
+    .nav-links a::after { content:''; position:absolute; bottom:-3px; left:0; width:0; height:1.5px; background:var(--rust); transition:width .3s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--black); }
+    .nav-links a:hover::after, .nav-links a.active::after { width:100%; }
+    .nav-cta {
+      font-size:.68rem; letter-spacing:.18em; text-transform:uppercase; font-weight:600;
+      color:var(--cream); background:var(--rust); padding:10px 22px; text-decoration:none;
+      position:relative; overflow:hidden; transition:color .3s;
+    }
+    .nav-cta::before { content:''; position:absolute; inset:0; background:var(--black); transform:translateX(-100%); transition:transform .3s ease; }
+    .nav-cta span { position:relative; z-index:1; }
+    .nav-cta:hover::before { transform:translateX(0); }
+
+    /* ══════════════════════
+       PAGE HERO
+    ══════════════════════ */
+    .page-hero {
+      padding: 160px 48px 80px;
+      background: var(--cream);
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(14,13,11,.08);
+    }
+
+    /* Ghost headline behind */
+    .page-hero::before {
+      content: 'WORK';
+      position: absolute;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(12rem, 26vw, 24rem);
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(14,13,11,.05);
+      right: -30px; bottom: -40px;
+      line-height: 1; pointer-events: none; user-select: none;
+      letter-spacing: .04em;
+    }
+
+    .hero-breadcrumb {
+      font-size: .6rem; letter-spacing: .28em; text-transform: uppercase;
+      font-weight: 600; color: rgba(14,13,11,.35);
+      margin-bottom: 32px;
+      opacity: 0; animation: fadeUp .6s ease forwards .2s;
+    }
+    .hero-breadcrumb span { color: var(--rust); }
+
+    .hero-top { display: flex; align-items: flex-end; justify-content: space-between; position: relative; z-index: 1; }
+
+    .hero-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 11vw, 10rem);
+      line-height: .9; letter-spacing: .02em;
+      color: var(--black);
+    }
+    .hero-heading .line { display:block; overflow:hidden; }
+    .hero-heading .line span {
+      display:block; opacity:0; transform:translateY(105%);
+      animation: slideUp .9s cubic-bezier(.16,1,.3,1) forwards;
+    }
+    .hero-heading .line:nth-child(1) span { animation-delay:.3s; }
+    .hero-heading .line:nth-child(2) span { animation-delay:.45s; color:var(--rust); font-family:'Playfair Display',serif; font-style:italic; font-size:.82em; }
+
+    .hero-right-col {
+      display: flex; flex-direction: column; align-items: flex-end;
+      gap: 24px; padding-bottom: 8px; position: relative; z-index: 1;
+      opacity: 0; animation: fadeUp .7s ease forwards .8s;
+    }
+    .hero-count-label {
+      font-size: .6rem; letter-spacing: .25em; text-transform: uppercase;
+      font-weight: 600; color: rgba(14,13,11,.4);
+    }
+    .hero-count-num {
+      font-family: 'Bebas Neue', sans-serif; font-size: 3.5rem;
+      color: var(--black); line-height: 1;
+    }
+    .hero-count-num span { color: var(--rust); }
+    .hero-tagline {
+      font-size: .85rem; line-height: 1.75; font-weight: 300;
+      color: rgba(14,13,11,.5); max-width: 280px; text-align: right;
+      border-right: 2px solid var(--rust); padding-right: 18px;
+    }
+
+    /* ══════════════════════
+       STICKY FILTER BAR
+    ══════════════════════ */
+    .filter-bar {
+      position: sticky; top: 72px; z-index: 400;
+      background: rgba(237,234,216,.95);
+      backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(14,13,11,.09);
+      padding: 0 48px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .filter-tabs { display: flex; }
+    .filter-tab {
+      font-size: .65rem; letter-spacing: .2em; text-transform: uppercase;
+      font-weight: 600; padding: 18px 22px;
+      background: none; border: none; color: rgba(14,13,11,.4);
+      cursor: none; transition: color .2s; position: relative;
+    }
+    .filter-tab::after {
+      content: ''; position: absolute; bottom: 0; left: 22px; right: 22px;
+      height: 2px; background: var(--rust);
+      transform: scaleX(0); transform-origin: left; transition: transform .3s;
+    }
+    .filter-tab:hover { color: var(--black); }
+    .filter-tab.active { color: var(--black); }
+    .filter-tab.active::after { transform: scaleX(1); }
+    .filter-count {
+      font-size: .6rem; letter-spacing: .2em; text-transform: uppercase;
+      font-weight: 600; color: rgba(14,13,11,.3);
+    }
+    .filter-count span { color: var(--rust); font-family: 'Bebas Neue', sans-serif; font-size: .85rem; }
+
+    /* ══════════════════════
+       FEATURED CASE STUDY
+    ══════════════════════ */
+    .featured {
+      background: var(--black);
+      display: grid; grid-template-columns: 1fr 1fr;
+      min-height: 80vh;
+      position: relative; overflow: hidden;
+    }
+
+    .featured-visual {
+      position: relative; overflow: hidden;
+      background: #1a1410;
+    }
+    /* Abstract project visual */
+    .featured-art {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .featured-art svg { width: 55%; opacity: .18; }
+
+    /* Animated scan lines */
+    .featured-scanlines {
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 2px,
+        rgba(237,234,216,.015) 2px,
+        rgba(237,234,216,.015) 4px
+      );
+      pointer-events: none;
+    }
+
+    .featured-tag {
+      position: absolute; top: 32px; left: 32px;
+      background: var(--rust); color: var(--cream);
+      font-size: .58rem; letter-spacing: .22em;
+      text-transform: uppercase; font-weight: 600;
+      padding: 6px 14px; z-index: 2;
+    }
+
+    /* Year stamp */
+    .featured-year {
+      position: absolute; bottom: 32px; right: 32px;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 5rem; color: rgba(237,234,216,.06);
+      line-height: 1; z-index: 2;
+    }
+
+    .featured-content {
+      padding: 80px 60px;
+      display: flex; flex-direction: column; justify-content: center;
+      position: relative; z-index: 2;
+    }
+
+    .featured-label {
+      font-size: .58rem; letter-spacing: .3em; text-transform: uppercase;
+      font-weight: 600; color: var(--rust); margin-bottom: 20px;
+    }
+    .featured-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 4.5vw, 4rem);
+      color: var(--cream); line-height: .95;
+      letter-spacing: .03em; margin-bottom: 24px;
+    }
+    .featured-meta {
+      display: flex; gap: 28px; margin-bottom: 28px;
+    }
+    .featured-meta-item { }
+    .fmi-label {
+      font-size: .55rem; letter-spacing: .22em; text-transform: uppercase;
+      color: rgba(237,234,216,.3); font-weight: 600; margin-bottom: 4px;
+    }
+    .fmi-val {
+      font-size: .82rem; color: rgba(237,234,216,.7); font-weight: 300;
+    }
+
+    .featured-desc {
+      font-size: .9rem; line-height: 1.85;
+      color: rgba(237,234,216,.45); font-weight: 300;
+      margin-bottom: 36px; max-width: 420px;
+    }
+
+    .featured-services {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 44px;
+    }
+    .service-chip {
+      font-size: .58rem; letter-spacing: .18em; text-transform: uppercase;
+      font-weight: 600; padding: 6px 14px;
+      background: rgba(237,234,216,.06);
+      border: 1px solid rgba(237,234,216,.12);
+      color: rgba(237,234,216,.5);
+    }
+
+    .featured-cta {
+      display: inline-flex; align-items: center; gap: 12px;
+      text-decoration: none; font-size: .7rem; letter-spacing: .2em;
+      text-transform: uppercase; font-weight: 600;
+      color: var(--cream);
+      border-bottom: 1.5px solid rgba(237,234,216,.2);
+      padding-bottom: 3px;
+      transition: color .2s, border-color .2s;
+      align-self: flex-start;
+    }
+    .featured-cta:hover { color: var(--rust); border-color: var(--rust); }
+
+    /* Outcome bar */
+    .featured-outcomes {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid rgba(237,234,216,.08); margin-top: auto;
+      padding-top: 36px;
+    }
+    .outcome {
+      text-align: center; padding: 0 20px;
+      border-right: 1px solid rgba(237,234,216,.08);
+    }
+    .outcome:last-child { border-right: none; }
+    .outcome-num {
+      font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem;
+      color: var(--rust); line-height: 1;
+    }
+    .outcome-label {
+      font-size: .58rem; letter-spacing: .18em; text-transform: uppercase;
+      color: rgba(237,234,216,.3); font-weight: 600; margin-top: 6px;
+    }
+
+    /* ══════════════════════
+       PROJECTS GRID
+    ══════════════════════ */
+    .projects-section {
+      padding: 80px 48px 120px;
+      background: var(--cream);
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 3px;
+    }
+
+    /* Layout */
+    .proj:nth-child(1)  { grid-column: 1 / 6;  }
+    .proj:nth-child(2)  { grid-column: 6 / 13; }
+    .proj:nth-child(3)  { grid-column: 1 / 5;  }
+    .proj:nth-child(4)  { grid-column: 5 / 9;  }
+    .proj:nth-child(5)  { grid-column: 9 / 13; }
+    .proj:nth-child(6)  { grid-column: 1 / 9;  }
+    .proj:nth-child(7)  { grid-column: 9 / 13; }
+    .proj:nth-child(8)  { grid-column: 1 / 5;  }
+    .proj:nth-child(9)  { grid-column: 5 / 13; }
+
+    .proj {
+      position: relative; overflow: hidden;
+      aspect-ratio: 4/3;
+      cursor: none;
+    }
+    .proj:nth-child(2) { aspect-ratio: 3/4; }
+    .proj:nth-child(6) { aspect-ratio: 16/9; }
+    .proj:nth-child(9) { aspect-ratio: 16/9; }
+
+    .proj-bg {
+      position: absolute; inset: 0;
+      transition: transform .65s cubic-bezier(.16,1,.3,1);
+    }
+    .proj:hover .proj-bg { transform: scale(1.05); }
+
+    /* Unique colour per card */
+    .proj:nth-child(1) .proj-bg  { background: linear-gradient(145deg,#1c1510,#2a1c14); }
+    .proj:nth-child(2) .proj-bg  { background: linear-gradient(145deg,#10141a,#141e28); }
+    .proj:nth-child(3) .proj-bg  { background: linear-gradient(145deg,#101410,#181e18); }
+    .proj:nth-child(4) .proj-bg  { background: linear-gradient(145deg,#1a1018,#241420); }
+    .proj:nth-child(5) .proj-bg  { background: linear-gradient(145deg,#1a1410,#281e14); }
+    .proj:nth-child(6) .proj-bg  { background: linear-gradient(145deg,#0e0d0b,#1a1512); }
+    .proj:nth-child(7) .proj-bg  { background: linear-gradient(145deg,#101418,#18202a); }
+    .proj:nth-child(8) .proj-bg  { background: linear-gradient(145deg,#161010,#241414); }
+    .proj:nth-child(9) .proj-bg  { background: linear-gradient(145deg,#101614,#14201c); }
+
+    .proj-art {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      opacity: .16; transition: opacity .4s, transform .65s cubic-bezier(.16,1,.3,1);
+    }
+    .proj:hover .proj-art { opacity: .28; transform: scale(1.08) rotate(3deg); }
+    .proj-art svg { width: 55%; height: 55%; }
+
+    /* Hover gradient overlay */
+    .proj-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(14,13,11,.95) 0%, rgba(14,13,11,.3) 50%, transparent 100%);
+      opacity: .7;
+      transition: opacity .35s;
+    }
+    .proj:hover .proj-overlay { opacity: 1; }
+
+    /* Rust top flash on hover */
+    .proj-flash {
+      position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: var(--rust);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .4s ease;
+    }
+    .proj:hover .proj-flash { transform: scaleX(1); }
+
+    .proj-content {
+      position: absolute; bottom: 0; left: 0; right: 0;
+      padding: 22px 24px; z-index: 3;
+      transform: translateY(6px);
+      transition: transform .35s;
+    }
+    .proj:hover .proj-content { transform: translateY(0); }
+
+    .proj-tags { display:flex; gap:6px; margin-bottom:8px; }
+    .proj-tag {
+      font-size: .52rem; letter-spacing: .18em; text-transform: uppercase;
+      font-weight: 600; color: var(--rust);
+      background: rgba(179,48,24,.14);
+      border: 1px solid rgba(179,48,24,.28); padding: 3px 8px;
+    }
+    .proj-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(1rem, 2vw, 1.6rem);
+      letter-spacing: .04em; color: var(--cream); line-height: 1.05;
+      margin-bottom: 6px;
+    }
+    .proj-sub {
+      font-size: .75rem; color: rgba(237,234,216,.45);
+      font-weight: 300; line-height: 1.5;
+      opacity: 0; max-height: 0; overflow: hidden;
+      transition: opacity .35s, max-height .35s;
+    }
+    .proj:hover .proj-sub { opacity: 1; max-height: 48px; }
+
+    .proj-num {
+      position: absolute; top: 18px; left: 20px;
+      font-family: 'Bebas Neue', sans-serif; font-size: .8rem;
+      letter-spacing: .18em; color: rgba(237,234,216,.2); z-index: 3;
+    }
+    .proj-arrow {
+      position: absolute; top: 16px; right: 18px;
+      width: 32px; height: 32px; background: var(--rust);
+      display: flex; align-items: center; justify-content: center;
+      font-size: .85rem; color: var(--cream); z-index: 3;
+      opacity: 0; transform: translate(6px,-6px);
+      transition: opacity .3s, transform .3s;
+    }
+    .proj:hover .proj-arrow { opacity: 1; transform: translate(0,0); }
+
+    /* ══════════════════════
+       CLIENT LOGOS STRIP
+    ══════════════════════ */
+    .clients {
+      background: var(--black);
+      padding: 72px 48px;
+      position: relative; overflow: hidden;
+      border-top: 1px solid rgba(237,234,216,.06);
+    }
+
+    .clients-label {
+      font-size: .58rem; letter-spacing: .3em; text-transform: uppercase;
+      font-weight: 600; color: rgba(237,234,216,.25);
+      text-align: center; margin-bottom: 52px;
+    }
+
+    .clients-marquee-wrap { overflow: hidden; }
+    .clients-marquee {
+      display: flex; gap: 60px;
+      animation: marquee 22s linear infinite;
+      width: max-content;
+    }
+    .clients-marquee:hover { animation-play-state: paused; }
+
+    .client-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.6rem; letter-spacing: .12em;
+      color: rgba(237,234,216,.15);
+      white-space: nowrap;
+      transition: color .3s;
+      cursor: none;
+    }
+    .client-logo:hover { color: rgba(237,234,216,.5); }
+
+    .client-dot {
+      font-size: 1rem; color: var(--rust); opacity: .4;
+      display: flex; align-items: center;
+      flex-shrink: 0;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ══════════════════════
+       CTA STRIP
+    ══════════════════════ */
+    .work-cta {
+      background: var(--cream);
+      padding: 100px 48px;
+      display: grid; grid-template-columns: 1fr auto;
+      align-items: center; gap: 60px;
+      position: relative; overflow: hidden;
+      border-top: 1px solid rgba(14,13,11,.08);
+    }
+    .work-cta::before {
+      content: '';
+      position: absolute; left: 0; top: 0; bottom: 0;
+      width: 4px; background: var(--rust);
+    }
+    .work-cta-text { }
+    .work-cta-eyebrow {
+      font-size: .6rem; letter-spacing: .3em; text-transform: uppercase;
+      font-weight: 600; color: var(--rust); margin-bottom: 16px;
+    }
+    .work-cta-heading {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.5rem, 5vw, 4.5rem);
+      line-height: .95; letter-spacing: .02em; color: var(--black);
+    }
+    .work-cta-heading em {
+      font-family: 'Playfair Display', serif;
+      font-style: italic; color: var(--rust); font-size: .85em;
+    }
+    .btn-black {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: var(--black); color: var(--cream);
+      text-decoration: none;
+      font-size: .7rem; letter-spacing: .2em; text-transform: uppercase;
+      font-weight: 600; padding: 18px 36px;
+      position: relative; overflow: hidden;
+      white-space: nowrap; transition: transform .2s;
+    }
+    .btn-black::before {
+      content: ''; position: absolute; inset: 0;
+      background: var(--rust); transform: translateX(-100%); transition: transform .3s;
+    }
+    .btn-black span { position: relative; z-index: 1; }
+    .btn-black:hover::before { transform: translateX(0); }
+    .btn-black:hover { transform: translateY(-2px); }
+
+    /* ══════════════════════
+       FOOTER
+    ══════════════════════ */
+    footer {
+      background: var(--black); color: var(--cream);
+      position: relative; overflow: hidden;
+    }
+    .footer-wordmark-wrap { padding: 60px 48px 0; border-bottom: 1px solid rgba(237,234,216,.07); overflow: hidden; }
+    .footer-wordmark {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(5rem, 12vw, 11rem); letter-spacing: .02em; line-height: .9;
+      color: transparent; -webkit-text-stroke: 1px rgba(237,234,216,.1);
+      display: block; padding-bottom: 18px;
+    }
+    .footer-wordmark strong { color: var(--rust); -webkit-text-stroke: 0; }
+    .footer-main {
+      display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+      padding: 56px 48px; border-bottom: 1px solid rgba(237,234,216,.07);
+    }
+    .footer-col { padding-right: 40px; }
+    .footer-col:not(:first-child) { border-left: 1px solid rgba(237,234,216,.07); padding-left: 40px; padding-right: 0; }
+    .footer-col-label { font-size:.55rem; letter-spacing:.3em; text-transform:uppercase; font-weight:600; color:var(--rust); margin-bottom:18px; }
+    .footer-about-text { font-size:.82rem; line-height:1.8; color:rgba(237,234,216,.35); font-weight:300; margin-bottom:22px; max-width:300px; }
+    .footer-socials { display:flex; gap:8px; }
+    .footer-social {
+      width:34px; height:34px; border:1px solid rgba(237,234,216,.12);
+      display:flex; align-items:center; justify-content:center;
+      font-size:.62rem; color:rgba(237,234,216,.35); text-decoration:none;
+      transition:background .2s, color .2s, border-color .2s; font-weight:600;
+    }
+    .footer-social:hover { background:var(--rust); color:var(--cream); border-color:var(--rust); }
+    .footer-links { list-style:none; display:flex; flex-direction:column; gap:12px; }
+    .footer-links a {
+      text-decoration:none; font-size:.8rem; color:rgba(237,234,216,.4);
+      font-weight:300; transition:color .2s; display:flex; align-items:center; gap:6px;
+    }
+    .footer-links a::before { content:'→'; font-size:.65rem; color:var(--rust); opacity:0; transform:translateX(-6px); transition:opacity .2s, transform .2s; }
+    .footer-links a:hover { color:var(--cream); }
+    .footer-links a:hover::before { opacity:1; transform:translateX(0); }
+    .footer-contact-item { margin-bottom:14px; }
+    .footer-contact-label { font-size:.52rem; letter-spacing:.2em; text-transform:uppercase; color:rgba(237,234,216,.25); font-weight:600; margin-bottom:3px; }
+    .footer-contact-val { font-size:.8rem; color:rgba(237,234,216,.5); font-weight:300; }
+    .footer-bottom {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:20px 48px; flex-wrap:wrap; gap:12px;
+    }
+    .footer-copyright { font-size:.62rem; letter-spacing:.12em; color:rgba(237,234,216,.2); }
+    .footer-copyright span { color:var(--rust); }
+    .footer-legal { display:flex; gap:20px; }
+    .footer-legal a { font-size:.6rem; letter-spacing:.15em; text-transform:uppercase; color:rgba(237,234,216,.18); text-decoration:none; transition:color .2s; }
+    .footer-legal a:hover { color:var(--cream); }
+    .footer-back-top {
+      font-size:.6rem; letter-spacing:.2em; text-transform:uppercase;
+      font-weight:600; font-family:'Barlow',sans-serif;
+      background:none; border:1px solid rgba(237,234,216,.1);
+      color:rgba(237,234,216,.25); padding:7px 14px; cursor:none; transition:all .2s;
+    }
+    .footer-back-top:hover { border-color:var(--rust); color:var(--rust); }
+
+    /* ══════════════════════
+       REVEAL & ANIMATIONS
+    ══════════════════════ */
+    .reveal { opacity:0; transform:translateY(32px); transition:opacity .7s ease, transform .7s ease; }
+    .reveal.visible { opacity:1; transform:translateY(0); }
+    .reveal-delay-1 { transition-delay:.1s; }
+    .reveal-delay-2 { transition-delay:.22s; }
+    .reveal-delay-3 { transition-delay:.34s; }
+
+    @keyframes slideUp { to { opacity:1; transform:translateY(0); } }
+    @keyframes fadeUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+
+    /* ══════════════════════
+       RESPONSIVE
+    ══════════════════════ */
+    @media (max-width: 960px) {
+      nav { padding:18px 24px; }
+      .nav-links, .nav-cta { display:none; }
+      .page-hero { padding:130px 24px 60px; }
+      .hero-top { flex-direction:column; align-items:flex-start; gap:28px; }
+      .hero-right-col { align-items:flex-start; }
+      .hero-tagline { text-align:left; border-right:none; border-left:2px solid var(--rust); padding-left:18px; padding-right:0; }
+      .filter-bar { padding:0 24px; overflow-x:auto; }
+      .featured { grid-template-columns:1fr; }
+      .featured-visual { min-height:50vw; }
+      .featured-outcomes { padding-top:24px; }
+      .projects-section { padding:60px 24px 80px; }
+      .projects-grid { grid-template-columns:1fr 1fr; gap:3px; }
+      .proj:nth-child(n) { grid-column:span 1; aspect-ratio:4/3; }
+      .clients { padding:48px 24px; }
+      .work-cta { padding:60px 24px; grid-template-columns:1fr; }
+      .footer-wordmark-wrap { padding:36px 24px 0; }
+      .footer-main { grid-template-columns:1fr 1fr; padding:36px 24px; gap:32px; }
+      .footer-col:not(:first-child) { border-left:none; padding-left:0; }
+      .footer-bottom { padding:16px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+  <div class="cursor-label" id="cursorLabel">VIEW</div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="truechaos-hero.html" class="nav-logo">
+      <svg width="32" height="28" viewBox="0 0 100 80" fill="none">
+        <rect x="10" y="8" width="80" height="18" rx="9" fill="#0E0D0B"/>
+        <rect x="10" y="8" width="18" height="44" rx="9" fill="#0E0D0B"/>
+        <rect x="46" y="8" width="18" height="30" rx="9" fill="#0E0D0B"/>
+        <path d="M10 44 Q10 72 52 72 Q92 72 92 44" stroke="#0E0D0B" stroke-width="18" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <span class="nav-logo-text">True Chaos</span>
+        <span class="nav-logo-sub">Creative Studio</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#" class="active">Work</a></li>
+      <li><a href="truechaos-about.html">Studio</a></li>
+      <li><a href="#">Services</a></li>
+      <li><a href="#">Journal</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta"><span>Start a Project</span></a>
+  </nav>
+
+  <!-- PAGE HERO -->
+  <section class="page-hero">
+    <div class="hero-breadcrumb">Home / <span>Our Work</span></div>
+    <div class="hero-top">
+      <h1 class="hero-heading">
+        <div class="line"><span>Selected</span></div>
+        <div class="line"><span>Projects</span></div>
+      </h1>
+      <div class="hero-right-col">
+        <div>
+          <div class="hero-count-label">Projects Completed</div>
+          <div class="hero-count-num"><span id="heroCount">0</span><span style="color:var(--rust)">+</span></div>
+        </div>
+        <p class="hero-tagline">Work that moves people. Campaigns that shift markets. Brands that refuse to be ignored.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- STICKY FILTER BAR -->
+  <div class="filter-bar">
+    <div class="filter-tabs">
+      <button class="filter-tab active" data-filter="all">All Work</button>
+      <button class="filter-tab" data-filter="branding">Branding</button>
+      <button class="filter-tab" data-filter="campaigns">Campaigns</button>
+      <button class="filter-tab" data-filter="digital">Digital</button>
+      <button class="filter-tab" data-filter="strategy">Strategy</button>
+    </div>
+    <div class="filter-count">Showing <span id="showCount">9</span> projects</div>
+  </div>
+
+  <!-- FEATURED CASE STUDY -->
+  <div class="featured reveal">
+    <div class="featured-visual">
+      <div class="featured-art">
+        <svg viewBox="0 0 300 300" fill="none">
+          <circle cx="150" cy="150" r="120" stroke="white" stroke-width="1.5"/>
+          <circle cx="150" cy="150" r="80" stroke="white" stroke-width="1"/>
+          <circle cx="150" cy="150" r="40" stroke="white" stroke-width="1.5"/>
+          <line x1="30" y1="150" x2="270" y2="150" stroke="white" stroke-width="1"/>
+          <line x1="150" y1="30" x2="150" y2="270" stroke="white" stroke-width="1"/>
+          <line x1="65" y1="65" x2="235" y2="235" stroke="white" stroke-width=".8" opacity=".5"/>
+          <line x1="235" y1="65" x2="65" y2="235" stroke="white" stroke-width=".8" opacity=".5"/>
+        </svg>
+      </div>
+      <div class="featured-scanlines"></div>
+      <div class="featured-tag">★ Featured Case Study</div>
+      <div class="featured-year">2024</div>
+    </div>
+
+    <div class="featured-content">
+      <p class="featured-label">↳ Obsidian Collective — 2024</p>
+      <h2 class="featured-title">Full Brand Identity & Launch Campaign</h2>
+
+      <div class="featured-meta">
+        <div class="featured-meta-item">
+          <div class="fmi-label">Client</div>
+          <div class="fmi-val">Obsidian Collective</div>
+        </div>
+        <div class="featured-meta-item">
+          <div class="fmi-label">Industry</div>
+          <div class="fmi-val">Luxury Lifestyle</div>
+        </div>
+        <div class="featured-meta-item">
+          <div class="fmi-label">Timeline</div>
+          <div class="fmi-val">12 Weeks</div>
+        </div>
+      </div>
+
+      <p class="featured-desc">
+        Obsidian Collective needed more than a rebrand — they needed a full repositioning as Lagos' premier luxury lifestyle brand. We built the identity from the ground up: naming architecture, visual language, tone of voice, and a launch campaign that made the city stop and look.
+      </p>
+
+      <div class="featured-services">
+        <span class="service-chip">Brand Strategy</span>
+        <span class="service-chip">Visual Identity</span>
+        <span class="service-chip">Copywriting</span>
+        <span class="service-chip">Launch Campaign</span>
+        <span class="service-chip">Art Direction</span>
+      </div>
+
+      <a href="#" class="featured-cta">View Full Case Study ↗</a>
+
+      <div class="featured-outcomes">
+        <div class="outcome">
+          <div class="outcome-num">3.2×</div>
+          <div class="outcome-label">Revenue Growth</div>
+        </div>
+        <div class="outcome">
+          <div class="outcome-num">480K</div>
+          <div class="outcome-label">Campaign Reach</div>
+        </div>
+        <div class="outcome">
+          <div class="outcome-num">92%</div>
+          <div class="outcome-label">Brand Recall</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECTS GRID -->
+  <div class="projects-section">
+    <div class="projects-grid">
+
+      <!-- 1 -->
+      <div class="proj reveal" data-category="campaigns">
+        <div class="proj-bg"></div>
+        <div class="proj-art"><svg viewBox="0 0 200 200" fill="none">
+          <polygon points="100,20 180,160 20,160" stroke="white" stroke-width="1.5"/>
+          <circle cx="100" cy="120" r="28" stroke="white" stroke-width="1" opacity=".6"/>
+        </svg></div>
+        <div class="proj-overlay"></div>
+        <div class="proj-flash"></div>
+        <span class="proj-num">02</span>
+        <div class="proj-arrow">↗</div>
+        <div class="proj-content">
+          <div class="proj-tags"><span class="proj-tag">Campaign</span><span class="proj-tag">OOH</span></div>
+          <div class="proj-name">Velo Sports — Launch Campaign</div>
+          <p class="proj-sub">360° launch across OOH, digital, and influencer — reached 1.2M in 30 days.</p>
+        </div>
+      </div>
+
+      <!-- 2 -->
+      <div class="proj reveal reveal-delay-1" data-category="digital">
+        <div class="proj-bg"></div>
+        <div class="proj-art"><svg viewBox="0 0 200 200" fill="none">
+          <rect x="30" y="30" width="60" height="140" rx="30" stroke="white" stroke-width="1.5"/>
+          <rect x="110" y="30" width="60" height="90" rx="30" stroke="white" stroke-width="1.5"/>
+          <path d="M110 140 Q140 200 170 140" stroke="white" stroke-width="1.5" fill="none"/>
+        </svg></div>
+        <div class="proj-overlay"></div>
+        <div class="proj-flash"></div>
+        <span class="proj-num">03</span>
+        <div class="proj-arrow">↗</div>
+        <div class="proj-content">
+          <div class="proj-tags"><span class="proj-tag">Digital</span><span class="proj-tag">Web</span></div>
+          <div class="proj-name">Nuance Beauty — Editorial Web</div>
+          <p class="proj-sub">A full e-commerce website that reads like a magazine. +210% conversion rate.</p>
+        </div>
+      </div>
+
+      <!-- 3 -->
+      <div class="proj reveal" data-category="strategy">
+        <div class="proj-bg"></div>
+        <div class="proj-art"><svg viewBox="0 0 200 200" fill="none">
+          <circle cx="70" cy="100" r="50" stroke="white" stroke-width="1.5"/>
+          <circle cx="130" cy="100" r="50" stroke="white" stroke-width="1.5"/>
+        </svg></div>
+        <div class="proj-overlay"></div>
+        <div class="proj-flash"></div>
+        <span class="proj-num">04</span>
+        <div class="proj-arrow">↗</div>
+        <div class="proj-content">
+          <div class="proj-tags"><span class="proj-tag">Strategy</span></div>
+          <div class="proj-name">Kinfolk Eateries — Market Expansion</div>
+          <p class="proj-sub">3-city growth strategy that doubled locations in 18 months.</p>
+        </div>
+      </div>
+
+      <!-- 4 -->
+      <div class="proj reveal reveal-delay-1" data-category="branding">
+        <div class="proj-bg"></div>
+        <div class="proj-art"><svg viewBox="0 0 200 200" fill="none">
+          <path d="M100 20 L180 100 L100 180 L20 100 Z" stroke="white" stroke-width="1.5"/>
+          <path d="M100 60 L140 100 L100 140 L60 100 Z" stroke="white" stroke-width="1" opacity=".5"/>
+        </svg></div>
+        <div class="proj-overlay"></div>
+        <div class="proj-flash"></div>
+        <span class="proj-num">05</span>
+        <div class="proj-arrow">↗</div>
+        <div class="proj-content">
+          <div class="proj-tags"><span class="proj-tag">Branding</span></div>
+          <div class="proj-name">Drift Audio — Brand Identity</div>
+          <p class="proj-sub">Naming, identity, and packaging for a new-gen audio hardware brand.</p>
+        </div>
+      </div>
+
+      <!-- 5 -->
+      <div class="proj reveal reveal-delay-2" data-category="campaigns">
+        <div class="proj-bg"></div>
+        <div class="proj-art"><svg viewBox="0 0 200 200" fill="none">
+          <line x1="20" y1="100" x2="180" y2="100" stroke="white" stroke-width="1.5"/>
+          <line x1="100" y1="20" x2="100" y2="180" stroke="white" stroke-width="1.5"/>
+          <circle cx="100" cy="100" r="60" stroke="white" stroke-width="1" opacity=".4"/>
+          <circle cx="100" cy="100" r="30" stroke="white" stroke-width="1.5"/>
+        </svg></div>
+        <div class="proj-overlay"></div>
+        <div class="proj-flash"></div>
+        <span class="proj-num">06</span>
+        <div class="proj-arrow">↗</div>
+        <div class="proj-content">
+          <div class="proj-tags"><span class="proj-tag">Campaigns</span><span class="proj-tag">Social</span></div>
+          <div class="proj-name">Lush Farms — Harvest Season Campaign</div>
+          <p class="proj-sub">Social-first campaign for an organic food brand — 4M impressions, 0 paid media.</p>
+        </div>
+      </div>
+
+      <!-- 6 — wide -->
+      <div class="proj reveal" data-category="branding">
+        <div class="proj-bg"></div>
+        <div class="proj-art"><svg viewBox="0 0 400 200" fill="none">
+          <circle cx="200" cy="100" r="80" stroke="white" stroke-width="1.5"/>
+          <rect x="80" y="40" width="240" height="120" stroke="white" stroke-width="1" opacity=".5"/>
+          <line x1="0" y1="100" x2="400" y2="100" stroke="white" stroke-width=".8" opacity=".3"/>
+        </svg></div>
+        <div class="proj-overlay"></div>
+        <div class="proj-flash"></div>
+        <span class="proj-num">07</span>
+        <div class="proj-arrow">↗</div>
+        <div class="proj-content">
+          <div class="proj-tags"><span class="proj-tag">Branding</span><span class="proj-tag">Strategy</span></div>
+          <div class="proj-name">Meridian Financial — Full Rebrand</div>
+          <p class="proj-sub">Complete repositioning of a legacy finance brand for a new generation of investors.</p>
+        </div>
+      </div>
+
+      <!-- 7 -->
+      <div class="proj reveal reveal-delay-1" data-category="digital">
+        <div class="proj-bg"></div>
+        <div class="proj-art"><svg viewBox="0 0 200 200" fill="none">
+          <rect x="40" y="40" width="120" height="120" stroke="white" stroke-width="1.5"/>
+          <rect x="60" y="60" width="80" height="80" stroke="white" stroke-width="1" opacity=".5"/>
+          <circle cx="100" cy="100" r="20" fill="white" opacity=".12"/>
+        </svg></div>
+        <div class="proj-overlay"></div>
+        <div class="proj-flash"></div>
+        <span class="proj-num">08</span>
+        <div class="proj-arrow">↗</div>
+        <div class="proj-content">
+          <div class="proj-tags"><span class="proj-tag">Digital</span></div>
+          <div class="proj-name">Apex Studios — App & Web Launch</div>
+          <p class="proj-sub">Brand identity and digital experience for a creative production studio.</p>
+        </div>
+      </div>
+
+      <!-- 8 -->
+      <div class="proj reveal" data-category="branding">
+        <div class="proj-bg"></div>
+        <div class="proj-art"><svg viewBox="0 0 200 200" fill="none">
+          <path d="M40 160 Q100 40 160 160" stroke="white" stroke-width="1.5" fill="none"/>
+          <path d="M60 160 Q100 70 140 160" stroke="white" stroke-width="1" fill="none" opacity=".5"/>
+        </svg></div>
+        <div class="proj-overlay"></div>
+        <div class="proj-flash"></div>
+        <span class="proj-num">09</span>
+        <div class="proj-arrow">↗</div>
+        <div class="proj-content">
+          <div class="proj-tags"><span class="proj-tag">Branding</span><span class="proj-tag">Identity</span></div>
+          <div class="proj-name">Horizon Hotels — Boutique Brand System</div>
+          <p class="proj-sub">Full visual identity, collateral, and digital design for a boutique hotel group.</p>
+        </div>
+      </div>
+
+      <!-- 9 — wide -->
+      <div class="proj reveal reveal-delay-1" data-category="strategy">
+        <div class="proj-bg"></div>
+        <div class="proj-art"><svg viewBox="0 0 400 200" fill="none">
+          <path d="M40 160 L120 60 L200 120 L280 40 L360 100" stroke="white" stroke-width="2" fill="none"/>
+          <circle cx="120" cy="60" r="6" fill="white" opacity=".5"/>
+          <circle cx="200" cy="120" r="6" fill="white" opacity=".5"/>
+          <circle cx="280" cy="40" r="6" fill="white" opacity=".5"/>
+        </svg></div>
+        <div class="proj-overlay"></div>
+        <div class="proj-flash"></div>
+        <span class="proj-num">10</span>
+        <div class="proj-arrow">↗</div>
+        <div class="proj-content">
+          <div class="proj-tags"><span class="proj-tag">Strategy</span><span class="proj-tag">Campaigns</span></div>
+          <div class="proj-name">Nova Tech Africa — Growth & GTM Strategy</div>
+          <p class="proj-sub">Go-to-market strategy and brand campaign for a Pan-African SaaS platform.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CLIENT LOGOS MARQUEE -->
+  <div class="clients reveal">
+    <p class="clients-label">Brands We've Built With</p>
+    <div class="clients-marquee-wrap">
+      <div class="clients-marquee">
+        <!-- Set 1 -->
+        <span class="client-logo">Obsidian Collective</span>
+        <span class="client-dot">◆</span>
+        <span class="client-logo">Velo Sports</span>
+        <span class="client-dot">◆</span>
+        <span class="client-logo">Nuance Beauty</span>
+        <span class="client-dot">◆</span>
+        <span class="client-logo">Kinfolk Eateries</span>
+        <span class="client-dot">◆</span>
+        <span class="client-logo">Drift Audio</span>
+        <span class="client-dot">◆</span>
+        <span class="client-logo">Meridian Financial</span>
+        <span class="client-dot">◆</span>
+        <span class="client-logo">Lush Farms</span>
+        <span class="client-dot">◆</span>
+        <span class="client-logo">Horizon Hotels</span>
+        <span class="client-dot">◆</span>
+        <span class="client-logo">Nova Tech Africa</span>
+        <span class="client-dot">◆</span>
+        <span class="client-logo">Apex Studios</span>
+        <span class="client-dot">◆</span>
+        <!-- Set 2 (duplicate for seamless loop) -->
+        <span class="client-logo">Obsidian Collective</span>
+        <span class="client-dot">◆</span>
+        <span class="client-logo">Velo Sports</span>
+        <span class="client-dot">◆</span>
+        <span class="client-logo">Nuance Beauty</span>
+        <span class="client-dot">◆</span>
+        <span class="client-logo">Kinfolk Eateries</span>
+        <span class="client-dot">◆</span>
+        <span class="client-logo">Drift Audio</span>
+        <span class="client-dot">◆</span>
+        <span class="client-logo">Meridian Financial</span>
+        <span class="client-dot">◆</span>
+        <span class="client-logo">Lush Farms</span>
+        <span class="client-dot">◆</span>
+        <span class="client-logo">Horizon Hotels</span>
+        <span class="client-dot">◆</span>
+        <span class="client-logo">Nova Tech Africa</span>
+        <span class="client-dot">◆</span>
+        <span class="client-logo">Apex Studios</span>
+        <span class="client-dot">◆</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA STRIP -->
+  <div class="work-cta reveal">
+    <div class="work-cta-text">
+      <p class="work-cta-eyebrow">↳ Your Project Is Next</p>
+      <h2 class="work-cta-heading">
+        Ready to Make<br>
+        Something <em>Iconic?</em>
+      </h2>
+    </div>
+    <a href="#" class="btn-black"><span>Start a Project →</span></a>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-wordmark-wrap">
+      <span class="footer-wordmark">TRUE <strong>CHAOS</strong></span>
+    </div>
+    <div class="footer-main">
+      <div class="footer-col">
+        <p class="footer-col-label">About the Studio</p>
+        <p class="footer-about-text">True Chaos is a creative and marketing studio built for brands that refuse to blend in. We craft bold identities, campaigns, and experiences that leave a mark.</p>
+        <div class="footer-socials">
+          <a href="#" class="footer-social">IG</a>
+          <a href="#" class="footer-social">LI</a>
+          <a href="#" class="footer-social">TW</a>
+          <a href="#" class="footer-social">BE</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-label">Pages</p>
+        <ul class="footer-links">
+          <li><a href="#">Home</a></li>
+          <li><a href="#">Our Work</a></li>
+          <li><a href="truechaos-about.html">The Studio</a></li>
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Journal</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-label">Services</p>
+        <ul class="footer-links">
+          <li><a href="#">Brand Identity</a></li>
+          <li><a href="#">Marketing Strategy</a></li>
+          <li><a href="#">Campaigns</a></li>
+          <li><a href="#">Digital Design</a></li>
+          <li><a href="#">Content Creation</a></li>
+          <li><a href="#">Brand Consulting</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-label">Contact</p>
+        <div class="footer-contact-item">
+          <div class="footer-contact-label">Email</div>
+          <div class="footer-contact-val">hello@truechaos.studio</div>
+        </div>
+        <div class="footer-contact-item">
+          <div class="footer-contact-label">Phone</div>
+          <div class="footer-contact-val">+234 123 456 7890</div>
+        </div>
+        <div class="footer-contact-item">
+          <div class="footer-contact-label">Based In</div>
+          <div class="footer-contact-val">Lagos, Nigeria<br>Working Worldwide</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copyright">© 2025 <span>True Chaos</span> Creative Studio. All rights reserved.</p>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+      </div>
+      <button class="footer-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Back to Top</button>
+    </div>
+  </footer>
+
+  <script>
+    /* Cursor */
+    const cursor = document.getElementById('cursor');
+    const ring   = document.getElementById('cursorRing');
+    const label  = document.getElementById('cursorLabel');
+    let mx=0,my=0,rx=0,ry=0;
+    document.addEventListener('mousemove', e => {
+      mx=e.clientX; my=e.clientY;
+      cursor.style.left=mx+'px'; cursor.style.top=my+'px';
+      label.style.left=mx+'px'; label.style.top=my+'px';
+    });
+    (function loop(){ rx+=(mx-rx)*.12; ry+=(my-ry)*.12; ring.style.left=rx+'px'; ring.style.top=ry+'px'; requestAnimationFrame(loop); })();
+
+    document.querySelectorAll('a,button').forEach(el=>{
+      el.addEventListener('mouseenter',()=>{ cursor.style.width='16px'; cursor.style.height='16px'; ring.style.width='48px'; ring.style.height='48px'; ring.style.borderColor='rgba(179,48,24,.9)'; });
+      el.addEventListener('mouseleave',()=>{ cursor.style.width='10px'; cursor.style.height='10px'; ring.style.width='32px'; ring.style.height='32px'; ring.style.borderColor='rgba(179,48,24,.55)'; });
+    });
+
+    /* VIEW label on project cards */
+    document.querySelectorAll('.proj').forEach(el=>{
+      el.addEventListener('mouseenter',()=>{ label.classList.add('show'); cursor.style.width='0'; cursor.style.height='0'; ring.style.width='0'; ring.style.height='0'; });
+      el.addEventListener('mouseleave',()=>{ label.classList.remove('show'); cursor.style.width='10px'; cursor.style.height='10px'; ring.style.width='32px'; ring.style.height='32px'; });
+    });
+
+    /* Scroll reveal */
+    const obs = new IntersectionObserver(entries=>{
+      entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+    },{ threshold:.1 });
+    document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+    /* Hero counter */
+    function animateCount(el, target, duration=1200){
+      const start=performance.now();
+      (function update(now){
+        const p=Math.min((now-start)/duration,1);
+        el.textContent=Math.floor((1-Math.pow(1-p,3))*target);
+        if(p<1) requestAnimationFrame(update); else el.textContent=target;
+      })(start);
+    }
+    setTimeout(()=>animateCount(document.getElementById('heroCount'),120),600);
+
+    /* Filter tabs */
+    const tabs = document.querySelectorAll('.filter-tab');
+    const cards = document.querySelectorAll('.proj');
+    const countEl = document.getElementById('showCount');
+    tabs.forEach(tab=>{
+      tab.addEventListener('click',()=>{
+        tabs.forEach(t=>t.classList.remove('active'));
+        tab.classList.add('active');
+        const filter = tab.dataset.filter;
+        let visible = 0;
+        cards.forEach(card=>{
+          const match = filter==='all' || card.dataset.category===filter;
+          card.style.opacity = match?'1':'0.25';
+          card.style.pointerEvents = match?'auto':'none';
+          if(match) visible++;
+        });
+        countEl.textContent = filter==='all'?'9':visible;
+      });
+    });
+  </script>
+</body>
+</html>

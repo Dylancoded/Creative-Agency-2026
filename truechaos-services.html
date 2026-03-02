@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Services — True Chaos Creative Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Playfair+Display:ital,wght@1,400;1,700&display=swap" rel="stylesheet">
+
+  <style>
+    *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+
+    :root{
+      --cream:#EDEAD8;
+      --black:#0E0D0B;
+      --rust:#B33018;
+      --rust-light:#D4401F;
+      --cream-dim:rgba(237,234,216,.55);
+    }
+
+    html{scroll-behavior:smooth}
+    body{background:var(--black);color:var(--cream);font-family:'Barlow',sans-serif;overflow-x:hidden;cursor:none}
+
+    /* Grain */
+    body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");pointer-events:none;z-index:9000;opacity:.35}
+
+    /* Cursor */
+    .cursor{position:fixed;width:10px;height:10px;background:var(--rust);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .2s,height .2s}
+    .cursor-ring{position:fixed;width:32px;height:32px;border:1.5px solid rgba(179,48,24,.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .2s,height .2s,border-color .2s}
+
+    /* ══════════════════════ NAV */
+    nav{position:fixed;top:0;left:0;right:0;z-index:500;display:flex;align-items:center;justify-content:space-between;padding:22px 48px;background:rgba(14,13,11,.9);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid rgba(237,234,216,.06)}
+    .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .nav-logo-text{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.1em;color:var(--cream);line-height:1}
+    .nav-logo-sub{font-size:.52rem;letter-spacing:.25em;color:var(--rust);text-transform:uppercase;display:block}
+    .nav-links{display:flex;gap:36px;list-style:none}
+    .nav-links a{text-decoration:none;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(237,234,216,.45);font-weight:600;transition:color .2s;position:relative}
+    .nav-links a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1.5px;background:var(--rust);transition:width .3s}
+    .nav-links a:hover,.nav-links a.active{color:var(--cream)}
+    .nav-links a:hover::after,.nav-links a.active::after{width:100%}
+    .nav-cta{font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--cream);background:var(--rust);padding:10px 22px;text-decoration:none;position:relative;overflow:hidden;transition:color .3s}
+    .nav-cta::before{content:'';position:absolute;inset:0;background:var(--cream);transform:translateX(-100%);transition:transform .3s ease}
+    .nav-cta span{position:relative;z-index:1}
+    .nav-cta:hover::before{transform:translateX(0)}
+    .nav-cta:hover{color:var(--black)}
+
+    /* ══════════════════════ HERO */
+    .page-hero{
+      min-height:100vh;background:var(--black);
+      display:grid;grid-template-columns:1fr 1fr;
+      position:relative;overflow:hidden;
+    }
+
+    /* Animated vertical grid lines */
+    .hero-grid-lines{position:absolute;inset:0;pointer-events:none}
+    .hero-grid-lines span{position:absolute;top:0;width:1px;height:100%;background:rgba(237,234,216,.035)}
+    .hero-grid-lines span:nth-child(1){left:25%}
+    .hero-grid-lines span:nth-child(2){left:50%}
+    .hero-grid-lines span:nth-child(3){left:75%}
+
+    .hero-left{display:flex;flex-direction:column;justify-content:flex-end;padding:160px 60px 80px 48px;position:relative;z-index:2}
+
+    .hero-breadcrumb{font-size:.6rem;letter-spacing:.28em;text-transform:uppercase;font-weight:600;color:rgba(237,234,216,.3);margin-bottom:32px;opacity:0;animation:fadeUp .6s ease forwards .2s}
+    .hero-breadcrumb span{color:var(--rust)}
+
+    .hero-heading{font-family:'Bebas Neue',sans-serif;font-size:clamp(5rem,10.5vw,9.5rem);line-height:.88;letter-spacing:.02em;margin-bottom:40px}
+    .hero-heading .line{display:block;overflow:hidden}
+    .hero-heading .line span{display:block;opacity:0;transform:translateY(105%);animation:slideUp .9s cubic-bezier(.16,1,.3,1) forwards}
+    .hero-heading .line:nth-child(1) span{animation-delay:.35s}
+    .hero-heading .line:nth-child(2) span{animation-delay:.5s;color:var(--rust)}
+    .hero-heading .line:nth-child(3) span{animation-delay:.65s;-webkit-text-stroke:1.5px rgba(237,234,216,.25);color:transparent}
+
+    .hero-desc{font-size:.95rem;line-height:1.85;color:rgba(237,234,216,.45);font-weight:300;max-width:400px;margin-bottom:48px;opacity:0;animation:fadeUp .7s ease forwards 1s}
+
+    .hero-cta-row{display:flex;align-items:center;gap:24px;opacity:0;animation:fadeUp .7s ease forwards 1.2s}
+    .btn-rust{display:inline-flex;align-items:center;gap:10px;background:var(--rust);color:var(--cream);text-decoration:none;font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;padding:16px 32px;position:relative;overflow:hidden;transition:transform .2s}
+    .btn-rust::before{content:'';position:absolute;inset:0;background:var(--cream);transform:translateX(-100%);transition:transform .3s}
+    .btn-rust span{position:relative;z-index:1}
+    .btn-rust:hover::before{transform:translateX(0)}
+    .btn-rust:hover{transform:translateY(-2px)}
+    .btn-rust:hover span{color:var(--black)}
+    .btn-ghost-cream{font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:rgba(237,234,216,.55);text-decoration:none;display:flex;align-items:center;gap:8px;border-bottom:1.5px solid rgba(237,234,216,.2);padding-bottom:2px;transition:color .2s,border-color .2s}
+    .btn-ghost-cream:hover{color:var(--cream);border-color:var(--cream)}
+
+    /* Right panel — service count display */
+    .hero-right{
+      display:grid;grid-template-rows:1fr 1fr;
+      position:relative;z-index:2;
+      border-left:1px solid rgba(237,234,216,.06);
+    }
+
+    .hero-stat-cell{
+      padding:60px;display:flex;flex-direction:column;justify-content:center;
+      border-bottom:1px solid rgba(237,234,216,.06);
+      position:relative;overflow:hidden;
+      opacity:0;animation:fadeUp .7s ease forwards;
+    }
+    .hero-stat-cell:nth-child(1){animation-delay:.7s}
+    .hero-stat-cell:nth-child(2){animation-delay:.9s;border-bottom:none}
+
+    .hero-stat-cell::before{
+      content:'';position:absolute;left:0;top:0;bottom:0;width:2px;
+      background:var(--rust);transform:scaleY(0);transform-origin:bottom;
+      transition:transform .5s ease;
+    }
+    .hero-stat-cell:hover::before{transform:scaleY(1)}
+
+    .stat-num{font-family:'Bebas Neue',sans-serif;font-size:clamp(4rem,7vw,6rem);line-height:.9;color:var(--cream);margin-bottom:12px}
+    .stat-num em{color:var(--rust);font-style:normal}
+    .stat-label{font-size:.62rem;letter-spacing:.25em;text-transform:uppercase;font-weight:600;color:rgba(237,234,216,.3);margin-bottom:16px}
+    .stat-desc{font-size:.82rem;line-height:1.7;color:rgba(237,234,216,.35);font-weight:300;max-width:260px}
+
+    /* ══════════════════════ SERVICES ACCORDION */
+    .services-section{background:var(--cream);color:var(--black);position:relative}
+    .services-section::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--rust) 0%,transparent 60%)}
+
+    .services-header{padding:100px 48px 0;display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:0}
+    .section-eyebrow{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;color:var(--rust);font-weight:600;margin-bottom:14px}
+    .section-heading{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,5.5vw,5rem);line-height:.95;letter-spacing:.02em;color:var(--black)}
+    .section-heading .accent{font-family:'Playfair Display',serif;font-style:italic;color:var(--rust);font-size:.85em}
+    .services-intro{font-size:.88rem;line-height:1.8;color:rgba(14,13,11,.5);font-weight:300;max-width:320px;text-align:right}
+
+    /* Accordion list */
+    .accordion{border-top:1px solid rgba(14,13,11,.1);margin-top:64px}
+
+    .acc-item{border-bottom:1px solid rgba(14,13,11,.1);position:relative;overflow:hidden}
+
+    /* Rust left bar reveal */
+    .acc-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--rust);transform:scaleY(0);transform-origin:top;transition:transform .4s cubic-bezier(.16,1,.3,1)}
+    .acc-item.open::before{transform:scaleY(1)}
+
+    .acc-header{
+      display:grid;grid-template-columns:64px 1fr auto 48px;
+      align-items:center;padding:36px 48px 36px 48px;
+      cursor:none;transition:background .25s;gap:24px;
+    }
+    .acc-header:hover{background:rgba(14,13,11,.03)}
+    .acc-item.open .acc-header{background:rgba(14,13,11,.04)}
+
+    .acc-num{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:.1em;color:rgba(14,13,11,.2);transition:color .25s}
+    .acc-item.open .acc-num{color:var(--rust)}
+
+    .acc-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.6rem,3vw,2.6rem);letter-spacing:.03em;color:var(--black);line-height:1;transition:color .25s}
+    .acc-item.open .acc-title{color:var(--rust)}
+
+    .acc-tag{font-size:.58rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:rgba(14,13,11,.35);padding:5px 12px;border:1px solid rgba(14,13,11,.12);white-space:nowrap}
+    .acc-item.open .acc-tag{color:var(--rust);border-color:var(--rust);background:rgba(179,48,24,.06)}
+
+    .acc-toggle{width:40px;height:40px;border:1.5px solid rgba(14,13,11,.15);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:rgba(14,13,11,.4);transition:background .25s,border-color .25s,transform .35s,color .25s;flex-shrink:0}
+    .acc-item.open .acc-toggle{background:var(--rust);border-color:var(--rust);color:var(--cream);transform:rotate(45deg)}
+
+    /* Panel */
+    .acc-panel{max-height:0;overflow:hidden;transition:max-height .55s cubic-bezier(.16,1,.3,1)}
+    .acc-panel-inner{
+      display:grid;grid-template-columns:1fr 1fr 1fr;
+      gap:0;
+      border-top:1px solid rgba(14,13,11,.08);
+      padding:0 48px 52px;
+    }
+
+    .acc-about{padding-top:40px;padding-right:48px;border-right:1px solid rgba(14,13,11,.08)}
+    .acc-about-text{font-size:.9rem;line-height:1.85;color:rgba(14,13,11,.55);font-weight:300;margin-bottom:28px}
+    .acc-about-link{display:inline-flex;align-items:center;gap:8px;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--rust);text-decoration:none;border-bottom:1.5px solid var(--rust);padding-bottom:2px;transition:opacity .2s}
+    .acc-about-link:hover{opacity:.7}
+
+    .acc-deliverables{padding-top:40px;padding-left:48px;padding-right:48px;border-right:1px solid rgba(14,13,11,.08)}
+    .acc-del-label{font-size:.58rem;letter-spacing:.25em;text-transform:uppercase;font-weight:600;color:rgba(14,13,11,.35);margin-bottom:18px}
+    .acc-del-list{list-style:none;display:flex;flex-direction:column;gap:10px}
+    .acc-del-list li{font-size:.82rem;color:rgba(14,13,11,.6);font-weight:300;display:flex;align-items:flex-start;gap:10px;line-height:1.5}
+    .acc-del-list li::before{content:'→';color:var(--rust);font-size:.65rem;flex-shrink:0;margin-top:2px}
+
+    .acc-meta{padding-top:40px;padding-left:48px}
+    .acc-meta-item{margin-bottom:24px}
+    .acc-meta-label{font-size:.55rem;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:rgba(14,13,11,.3);margin-bottom:5px}
+    .acc-meta-val{font-size:.88rem;color:var(--black);font-weight:400}
+
+    /* ══════════════════════ ENGAGEMENT TIERS */
+    .tiers{background:var(--black);padding:120px 48px;position:relative;overflow:hidden}
+    .tiers::before{content:'HOW';position:absolute;font-family:'Bebas Neue',sans-serif;font-size:clamp(12rem,26vw,22rem);color:transparent;-webkit-text-stroke:1px rgba(237,234,216,.03);right:-20px;bottom:-30px;line-height:1;pointer-events:none;user-select:none}
+
+    .tiers-header{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:64px}
+    .tiers-header .section-heading{color:var(--cream)}
+    .tiers-subhead{font-size:.88rem;line-height:1.8;color:rgba(237,234,216,.4);font-weight:300;max-width:300px;text-align:right}
+
+    .tiers-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px}
+
+    .tier-card{
+      background:rgba(237,234,216,.04);border:1px solid rgba(237,234,216,.07);
+      padding:52px 44px;position:relative;overflow:hidden;
+      transition:background .3s,border-color .3s;
+      cursor:none;
+    }
+    .tier-card:hover{background:rgba(237,234,216,.07);border-color:rgba(237,234,216,.15)}
+    .tier-card.featured-tier{background:var(--rust);border-color:var(--rust)}
+    .tier-card.featured-tier:hover{background:var(--rust-light);border-color:var(--rust-light)}
+
+    /* Top corner badge */
+    .tier-badge{position:absolute;top:20px;right:20px;font-size:.52rem;letter-spacing:.22em;text-transform:uppercase;font-weight:600;color:var(--cream);background:rgba(237,234,216,.12);padding:4px 10px}
+    .tier-card.featured-tier .tier-badge{background:rgba(237,234,216,.25)}
+
+    .tier-icon{font-size:1.6rem;margin-bottom:24px;display:block}
+    .tier-name{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:.06em;color:var(--cream);margin-bottom:10px}
+    .tier-tagline{font-size:.8rem;line-height:1.65;color:rgba(237,234,216,.45);font-weight:300;margin-bottom:32px;padding-bottom:32px;border-bottom:1px solid rgba(237,234,216,.1)}
+    .tier-card.featured-tier .tier-tagline{color:rgba(237,234,216,.7);border-bottom-color:rgba(237,234,216,.2)}
+
+    .tier-features{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:40px}
+    .tier-features li{font-size:.82rem;color:rgba(237,234,216,.5);font-weight:300;display:flex;align-items:flex-start;gap:10px;line-height:1.5}
+    .tier-features li::before{content:'✓';color:var(--rust);font-size:.7rem;flex-shrink:0;margin-top:1px}
+    .tier-card.featured-tier .tier-features li{color:rgba(237,234,216,.8)}
+    .tier-card.featured-tier .tier-features li::before{color:rgba(237,234,216,.9)}
+
+    .tier-cta{display:inline-flex;align-items:center;gap:8px;font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;text-decoration:none;transition:gap .2s}
+    .tier-card:not(.featured-tier) .tier-cta{color:rgba(237,234,216,.5);border-bottom:1.5px solid rgba(237,234,216,.15);padding-bottom:2px}
+    .tier-card:not(.featured-tier) .tier-cta:hover{color:var(--cream);border-color:var(--cream);gap:14px}
+    .tier-card.featured-tier .tier-cta{color:var(--cream);background:rgba(237,234,216,.2);padding:12px 24px;border:1px solid rgba(237,234,216,.3)}
+    .tier-card.featured-tier .tier-cta:hover{background:rgba(237,234,216,.3)}
+
+    /* Decorative number in bg */
+    .tier-bg-num{position:absolute;bottom:-16px;right:10px;font-family:'Bebas Neue',sans-serif;font-size:7rem;color:rgba(237,234,216,.04);line-height:1;pointer-events:none;user-select:none}
+    .tier-card.featured-tier .tier-bg-num{color:rgba(237,234,216,.08)}
+
+    /* ══════════════════════ TESTIMONIALS */
+    .testimonials{background:var(--cream);color:var(--black);padding:120px 48px;position:relative;overflow:hidden}
+
+    .testimonials-header{margin-bottom:72px}
+
+    .testimonials-track-wrap{overflow:hidden}
+    .testimonials-track{
+      display:grid;grid-template-columns:repeat(3,1fr);
+      gap:3px;
+    }
+
+    .testi-card{
+      background:rgba(14,13,11,.03);border:1px solid rgba(14,13,11,.08);
+      padding:44px 40px;position:relative;overflow:hidden;
+      transition:background .3s,border-color .3s;
+      cursor:none;
+    }
+    .testi-card:hover{background:var(--black);border-color:var(--black)}
+
+    .testi-quote-mark{font-family:'Playfair Display',serif;font-size:5rem;color:var(--rust);opacity:.15;line-height:.7;margin-bottom:16px;display:block;transition:opacity .3s}
+    .testi-card:hover .testi-quote-mark{opacity:.25}
+
+    .testi-text{font-family:'Playfair Display',serif;font-style:italic;font-size:clamp(.9rem,1.5vw,1.08rem);line-height:1.75;color:rgba(14,13,11,.75);margin-bottom:32px;transition:color .3s}
+    .testi-card:hover .testi-text{color:rgba(237,234,216,.75)}
+
+    .testi-divider{height:1px;background:rgba(14,13,11,.1);margin-bottom:24px;transition:background .3s}
+    .testi-card:hover .testi-divider{background:rgba(237,234,216,.12)}
+
+    .testi-author{display:flex;align-items:center;gap:14px}
+    .testi-avatar{width:40px;height:40px;border-radius:50%;background:var(--rust);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--cream);flex-shrink:0}
+    .testi-name{font-size:.82rem;font-weight:600;color:var(--black);transition:color .3s}
+    .testi-card:hover .testi-name{color:var(--cream)}
+    .testi-role{font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;color:rgba(14,13,11,.4);margin-top:2px;transition:color .3s}
+    .testi-card:hover .testi-role{color:rgba(237,234,216,.4)}
+
+    /* Stars */
+    .testi-stars{position:absolute;top:32px;right:32px;color:var(--rust);font-size:.75rem;letter-spacing:2px}
+
+    /* ══════════════════════ FINAL CTA */
+    .services-cta{
+      background:var(--black);padding:120px 48px;
+      display:grid;grid-template-columns:1fr 1fr;
+      gap:80px;align-items:center;
+      position:relative;overflow:hidden;
+      border-top:1px solid rgba(237,234,216,.06);
+    }
+    .services-cta::after{content:'';position:absolute;right:0;top:0;bottom:0;width:50%;background:var(--rust);clip-path:polygon(20% 0%,100% 0%,100% 100%,0% 100%);z-index:0;opacity:.06}
+
+    .cta-left{position:relative;z-index:1}
+    .cta-eyebrow{font-size:.6rem;letter-spacing:.3em;text-transform:uppercase;font-weight:600;color:var(--rust);margin-bottom:16px}
+    .cta-heading{font-family:'Bebas Neue',sans-serif;font-size:clamp(3rem,6.5vw,6rem);line-height:.9;letter-spacing:.02em;color:var(--cream);margin-bottom:32px}
+    .cta-heading em{font-family:'Playfair Display',serif;font-style:italic;color:var(--rust);font-size:.82em}
+    .cta-body{font-size:.9rem;line-height:1.85;color:rgba(237,234,216,.45);font-weight:300;max-width:400px}
+
+    .cta-right{position:relative;z-index:1;display:flex;flex-direction:column;gap:16px}
+
+    .cta-contact-item{padding:24px 32px;border:1px solid rgba(237,234,216,.1);display:flex;align-items:center;justify-content:space-between;text-decoration:none;color:var(--cream);position:relative;overflow:hidden;transition:border-color .3s}
+    .cta-contact-item::before{content:'';position:absolute;inset:0;background:var(--rust);transform:translateX(-100%);transition:transform .4s cubic-bezier(.16,1,.3,1)}
+    .cta-contact-item:hover{border-color:var(--rust)}
+    .cta-contact-item:hover::before{transform:translateX(0)}
+
+    .cta-contact-label{font-size:.55rem;letter-spacing:.25em;text-transform:uppercase;font-weight:600;color:rgba(237,234,216,.35);position:relative;z-index:1;transition:color .3s}
+    .cta-contact-val{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:.06em;position:relative;z-index:1;transition:color .3s}
+    .cta-contact-arrow{position:relative;z-index:1;opacity:0;transform:translateX(-8px);transition:opacity .3s,transform .3s}
+    .cta-contact-item:hover .cta-contact-label{color:rgba(237,234,216,.6)}
+    .cta-contact-item:hover .cta-contact-arrow{opacity:1;transform:translateX(0)}
+
+    /* ══════════════════════ FOOTER */
+    footer{background:var(--black);color:var(--cream);position:relative;overflow:hidden;border-top:1px solid rgba(237,234,216,.07)}
+    .footer-wordmark-wrap{padding:60px 48px 0;border-bottom:1px solid rgba(237,234,216,.07);overflow:hidden}
+    .footer-wordmark{font-family:'Bebas Neue',sans-serif;font-size:clamp(5rem,12vw,11rem);letter-spacing:.02em;line-height:.9;color:transparent;-webkit-text-stroke:1px rgba(237,234,216,.1);display:block;padding-bottom:18px}
+    .footer-wordmark strong{color:var(--rust);-webkit-text-stroke:0}
+    .footer-main{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;padding:56px 48px;border-bottom:1px solid rgba(237,234,216,.07)}
+    .footer-col{padding-right:40px}
+    .footer-col:not(:first-child){border-left:1px solid rgba(237,234,216,.07);padding-left:40px;padding-right:0}
+    .footer-col-label{font-size:.55rem;letter-spacing:.3em;text-transform:uppercase;font-weight:600;color:var(--rust);margin-bottom:18px}
+    .footer-about-text{font-size:.82rem;line-height:1.8;color:rgba(237,234,216,.35);font-weight:300;margin-bottom:22px;max-width:300px}
+    .footer-socials{display:flex;gap:8px}
+    .footer-social{width:34px;height:34px;border:1px solid rgba(237,234,216,.12);display:flex;align-items:center;justify-content:center;font-size:.62rem;color:rgba(237,234,216,.35);text-decoration:none;transition:background .2s,color .2s,border-color .2s;font-weight:600}
+    .footer-social:hover{background:var(--rust);color:var(--cream);border-color:var(--rust)}
+    .footer-links{list-style:none;display:flex;flex-direction:column;gap:12px}
+    .footer-links a{text-decoration:none;font-size:.8rem;color:rgba(237,234,216,.4);font-weight:300;transition:color .2s;display:flex;align-items:center;gap:6px}
+    .footer-links a::before{content:'→';font-size:.65rem;color:var(--rust);opacity:0;transform:translateX(-6px);transition:opacity .2s,transform .2s}
+    .footer-links a:hover{color:var(--cream)}
+    .footer-links a:hover::before{opacity:1;transform:translateX(0)}
+    .footer-contact-item{margin-bottom:14px}
+    .footer-contact-label{font-size:.52rem;letter-spacing:.2em;text-transform:uppercase;color:rgba(237,234,216,.25);font-weight:600;margin-bottom:3px}
+    .footer-contact-val{font-size:.8rem;color:rgba(237,234,216,.5);font-weight:300}
+    .footer-bottom{display:flex;align-items:center;justify-content:space-between;padding:20px 48px;flex-wrap:wrap;gap:12px}
+    .footer-copyright{font-size:.62rem;letter-spacing:.12em;color:rgba(237,234,216,.2)}
+    .footer-copyright span{color:var(--rust)}
+    .footer-legal{display:flex;gap:20px}
+    .footer-legal a{font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:rgba(237,234,216,.18);text-decoration:none;transition:color .2s}
+    .footer-legal a:hover{color:var(--cream)}
+    .footer-back-top{font-size:.6rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;font-family:'Barlow',sans-serif;background:none;border:1px solid rgba(237,234,216,.1);color:rgba(237,234,216,.25);padding:7px 14px;cursor:none;transition:all .2s}
+    .footer-back-top:hover{border-color:var(--rust);color:var(--rust)}
+
+    /* ══════════════════════ REVEAL & ANIMATIONS */
+    .reveal{opacity:0;transform:translateY(32px);transition:opacity .7s ease,transform .7s ease}
+    .reveal.visible{opacity:1;transform:translateY(0)}
+    .reveal-delay-1{transition-delay:.1s}
+    .reveal-delay-2{transition-delay:.22s}
+    .reveal-delay-3{transition-delay:.34s}
+    .reveal-delay-4{transition-delay:.46s}
+
+    @keyframes slideUp{to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+    /* ══════════════════════ RESPONSIVE */
+    @media(max-width:960px){
+      nav{padding:18px 24px}
+      .nav-links,.nav-cta{display:none}
+      .page-hero{grid-template-columns:1fr;min-height:auto}
+      .hero-left{padding:140px 24px 60px}
+      .hero-right{grid-template-rows:auto auto;border-left:none;border-top:1px solid rgba(237,234,216,.06)}
+      .hero-stat-cell{padding:40px 24px}
+      .services-header{padding:60px 24px 0;flex-direction:column;align-items:flex-start;gap:16px}
+      .services-intro{text-align:left;max-width:100%}
+      .acc-header{grid-template-columns:40px 1fr 40px;padding:24px 24px;gap:12px}
+      .acc-tag{display:none}
+      .acc-panel-inner{grid-template-columns:1fr;padding:0 24px 36px}
+      .acc-about{padding-right:0;border-right:none;border-bottom:1px solid rgba(14,13,11,.08);padding-bottom:28px}
+      .acc-deliverables{padding-left:0;padding-right:0;border-right:none;border-bottom:1px solid rgba(14,13,11,.08);padding-bottom:28px}
+      .acc-meta{padding-left:0}
+      .tiers{padding:80px 24px}
+      .tiers-header{flex-direction:column;align-items:flex-start;gap:16px}
+      .tiers-subhead{text-align:left}
+      .tiers-grid{grid-template-columns:1fr}
+      .testimonials{padding:80px 24px}
+      .testimonials-track{grid-template-columns:1fr}
+      .services-cta{padding:80px 24px;grid-template-columns:1fr;gap:48px}
+      .footer-wordmark-wrap{padding:36px 24px 0}
+      .footer-main{grid-template-columns:1fr 1fr;padding:36px 24px;gap:32px}
+      .footer-col:not(:first-child){border-left:none;padding-left:0}
+      .footer-bottom{padding:16px 24px}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-ring" id="cursorRing"></div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="truechaos-hero.html" class="nav-logo">
+      <svg width="32" height="28" viewBox="0 0 100 80" fill="none">
+        <rect x="10" y="8" width="80" height="18" rx="9" fill="#EDEAD8"/>
+        <rect x="10" y="8" width="18" height="44" rx="9" fill="#EDEAD8"/>
+        <rect x="46" y="8" width="18" height="30" rx="9" fill="#EDEAD8"/>
+        <path d="M10 44 Q10 72 52 72 Q92 72 92 44" stroke="#EDEAD8" stroke-width="18" fill="none" stroke-linecap="round"/>
+      </svg>
+      <div>
+        <span class="nav-logo-text">True Chaos</span>
+        <span class="nav-logo-sub">Creative Studio</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="truechaos-work.html">Work</a></li>
+      <li><a href="truechaos-about.html">Studio</a></li>
+      <li><a href="#" class="active">Services</a></li>
+      <li><a href="#">Journal</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta"><span>Start a Project</span></a>
+  </nav>
+
+  <!-- ═════════════════ HERO -->
+  <section class="page-hero">
+    <div class="hero-grid-lines"><span></span><span></span><span></span></div>
+
+    <div class="hero-left">
+      <div class="hero-breadcrumb">Home / <span>Services</span></div>
+      <h1 class="hero-heading">
+        <div class="line"><span>What</span></div>
+        <div class="line"><span>We Do</span></div>
+        <div class="line"><span>Best.</span></div>
+      </h1>
+      <p class="hero-desc">Six core service areas. One goal: to make your brand impossible to ignore. From strategy to final pixel — we do the whole thing, or just the part you need.</p>
+      <div class="hero-cta-row">
+        <a href="#services" class="btn-rust"><span>Explore Services ↓</span></a>
+        <a href="#contact" class="btn-ghost-cream">Let's Talk →</a>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="hero-stat-cell">
+        <div class="stat-label">Core Services</div>
+        <div class="stat-num"><em>6</em></div>
+        <p class="stat-desc">Distinct service areas covering every dimension of brand and marketing work — from identity to campaigns to digital.</p>
+      </div>
+      <div class="hero-stat-cell">
+        <div class="stat-label">Years Delivering</div>
+        <div class="stat-num">8<em>+</em></div>
+        <p class="stat-desc">Over 120 projects shipped across branding, campaigns, digital, and strategy for brands across Africa and beyond.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════════════ SERVICES ACCORDION -->
+  <section class="services-section" id="services">
+    <div class="services-header reveal">
+      <div>
+        <p class="section-eyebrow">↳ Our Capabilities</p>
+        <h2 class="section-heading">Our <span class="accent">Services</span></h2>
+      </div>
+      <p class="services-intro">Every engagement is built around your goals — we scope and shape the work to fit what you actually need.</p>
+    </div>
+
+    <div class="accordion reveal">
+
+      <!-- 01 Brand Identity -->
+      <div class="acc-item open">
+        <div class="acc-header">
+          <span class="acc-num">01</span>
+          <span class="acc-title">Brand Identity</span>
+          <span class="acc-tag">Foundation</span>
+          <div class="acc-toggle">+</div>
+        </div>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
+            <div class="acc-about">
+              <p class="acc-about-text">Your brand is more than a logo — it's the full system of signals that tells the world who you are. We build brand identities that are distinctive, durable, and designed to work across every touchpoint from first click to physical space.</p>
+              <a href="#contact" class="acc-about-link">Enquire About This Service →</a>
+            </div>
+            <div class="acc-deliverables">
+              <p class="acc-del-label">What You Get</p>
+              <ul class="acc-del-list">
+                <li>Brand strategy & positioning</li>
+                <li>Logo design & mark system</li>
+                <li>Typography & colour system</li>
+                <li>Brand voice & tone of voice guide</li>
+                <li>Full brand guidelines document</li>
+                <li>Stationery & collateral design</li>
+                <li>Brand asset library</li>
+              </ul>
+            </div>
+            <div class="acc-meta">
+              <div class="acc-meta-item">
+                <div class="acc-meta-label">Typical Timeline</div>
+                <div class="acc-meta-val">6 – 12 Weeks</div>
+              </div>
+              <div class="acc-meta-item">
+                <div class="acc-meta-label">Best For</div>
+                <div class="acc-meta-val">New brands, rebrands, brand extensions</div>
+              </div>
+              <div class="acc-meta-item">
+                <div class="acc-meta-label">Starting From</div>
+                <div class="acc-meta-val">Custom Scoped</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 02 Marketing Campaigns -->
+      <div class="acc-item">
+        <div class="acc-header">
+          <span class="acc-num">02</span>
+          <span class="acc-title">Marketing Campaigns</span>
+          <span class="acc-tag">Growth</span>
+          <div class="acc-toggle">+</div>
+        </div>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
+            <div class="acc-about">
+              <p class="acc-about-text">Campaigns that don't just look good — they actually move the needle. We build integrated marketing campaigns that combine creative strategy, compelling content, and smart channel planning to drive real outcomes for your brand.</p>
+              <a href="#contact" class="acc-about-link">Enquire About This Service →</a>
+            </div>
+            <div class="acc-deliverables">
+              <p class="acc-del-label">What You Get</p>
+              <ul class="acc-del-list">
+                <li>Campaign strategy & concept development</li>
+                <li>Creative direction & art direction</li>
+                <li>Social media content & copy</li>
+                <li>OOH & print creative</li>
+                <li>Influencer strategy & briefs</li>
+                <li>Campaign performance reporting</li>
+                <li>Post-campaign analysis</li>
+              </ul>
+            </div>
+            <div class="acc-meta">
+              <div class="acc-meta-item">
+                <div class="acc-meta-label">Typical Timeline</div>
+                <div class="acc-meta-val">4 – 10 Weeks</div>
+              </div>
+              <div class="acc-meta-item">
+                <div class="acc-meta-label">Best For</div>
+                <div class="acc-meta-val">Product launches, brand activations, seasonal</div>
+              </div>
+              <div class="acc-meta-item">
+                <div class="acc-meta-label">Starting From</div>
+                <div class="acc-meta-val">Custom Scoped</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 03 Digital Design -->
+      <div class="acc-item">
+        <div class="acc-header">
+          <span class="acc-num">03</span>
+          <span class="acc-title">Digital Design</span>
+          <span class="acc-tag">Digital</span>
+          <div class="acc-toggle">+</div>
+        </div>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
+            <div class="acc-about">
+              <p class="acc-about-text">We design digital experiences that feel as good as they perform. Whether it's a full website, a landing page, or a complete e-commerce build — we bring editorial craft to every screen your customers will see.</p>
+              <a href="#contact" class="acc-about-link">Enquire About This Service →</a>
+            </div>
+            <div class="acc-deliverables">
+              <p class="acc-del-label">What You Get</p>
+              <ul class="acc-del-list">
+                <li>UX research & wireframing</li>
+                <li>Web & app UI design</li>
+                <li>E-commerce design & UX</li>
+                <li>Motion & micro-interaction design</li>
+                <li>Design system & component library</li>
+                <li>Developer handoff & support</li>
+              </ul>
+            </div>
+            <div class="acc-meta">
+              <div class="acc-meta-item">
+                <div class="acc-meta-label">Typical Timeline</div>
+                <div class="acc-meta-val">6 – 14 Weeks</div>
+              </div>
+              <div class="acc-meta-item">
+                <div class="acc-meta-label">Best For</div>
+                <div class="acc-meta-val">Websites, apps, e-commerce, landing pages</div>
+              </div>
+              <div class="acc-meta-item">
+                <div class="acc-meta-label">Starting From</div>
+                <div class="acc-meta-val">Custom Scoped</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 04 Brand Strategy -->
+      <div class="acc-item">
+        <div class="acc-header">
+          <span class="acc-num">04</span>
+          <span class="acc-title">Brand Strategy</span>
+          <span class="acc-tag">Strategy</span>
+          <div class="acc-toggle">+</div>
+        </div>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
+            <div class="acc-about">
+              <p class="acc-about-text">Strategy is where everything starts. We dig into your market, your competitors, and your customers to find the positioning that makes you genuinely different — then we build the playbook to own it.</p>
+              <a href="#contact" class="acc-about-link">Enquire About This Service →</a>
+            </div>
+            <div class="acc-deliverables">
+              <p class="acc-del-label">What You Get</p>
+              <ul class="acc-del-list">
+                <li>Market & competitor research</li>
+                <li>Audience profiling & insights</li>
+                <li>Brand positioning framework</li>
+                <li>Messaging architecture</li>
+                <li>Growth opportunity mapping</li>
+                <li>Strategic brand roadmap</li>
+              </ul>
+            </div>
+            <div class="acc-meta">
+              <div class="acc-meta-item">
+                <div class="acc-meta-label">Typical Timeline</div>
+                <div class="acc-meta-val">3 – 6 Weeks</div>
+              </div>
+              <div class="acc-meta-item">
+                <div class="acc-meta-label">Best For</div>
+                <div class="acc-meta-val">New market entry, repositioning, growth planning</div>
+              </div>
+              <div class="acc-meta-item">
+                <div class="acc-meta-label">Starting From</div>
+                <div class="acc-meta-val">Custom Scoped</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 05 Content Creation -->
+      <div class="acc-item">
+        <div class="acc-header">
+          <span class="acc-num">05</span>
+          <span class="acc-title">Content Creation</span>
+          <span class="acc-tag">Content</span>
+          <div class="acc-toggle">+</div>
+        </div>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
+            <div class="acc-about">
+              <p class="acc-about-text">Content that sounds like you — but sharper, more consistent, and built to work across every platform. From brand photography to social-first video, we create content that earns attention instead of just buying it.</p>
+              <a href="#contact" class="acc-about-link">Enquire About This Service →</a>
+            </div>
+            <div class="acc-deliverables">
+              <p class="acc-del-label">What You Get</p>
+              <ul class="acc-del-list">
+                <li>Content strategy & calendar</li>
+                <li>Copywriting & brand voice</li>
+                <li>Social media content production</li>
+                <li>Video concept & art direction</li>
+                <li>Photography direction & editing</li>
+                <li>Monthly retainer options</li>
+              </ul>
+            </div>
+            <div class="acc-meta">
+              <div class="acc-meta-item">
+                <div class="acc-meta-label">Typical Timeline</div>
+                <div class="acc-meta-val">Ongoing / Monthly</div>
+              </div>
+              <div class="acc-meta-item">
+                <div class="acc-meta-label">Best For</div>
+                <div class="acc-meta-val">Ongoing brand content, social presence, campaigns</div>
+              </div>
+              <div class="acc-meta-item">
+                <div class="acc-meta-label">Starting From</div>
+                <div class="acc-meta-val">Custom Scoped</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 06 Brand Consulting -->
+      <div class="acc-item">
+        <div class="acc-header">
+          <span class="acc-num">06</span>
+          <span class="acc-title">Brand Consulting</span>
+          <span class="acc-tag">Advisory</span>
+          <div class="acc-toggle">+</div>
+        </div>
+        <div class="acc-panel">
+          <div class="acc-panel-inner">
+            <div class="acc-about">
+              <p class="acc-about-text">Sometimes you don't need us to build — you need us to advise. Our senior team offers consulting engagements for founders and CMOs who want expert creative and strategic input on their brand, their team, or their marketing decisions.</p>
+              <a href="#contact" class="acc-about-link">Enquire About This Service →</a>
+            </div>
+            <div class="acc-deliverables">
+              <p class="acc-del-label">What You Get</p>
+              <ul class="acc-del-list">
+                <li>Brand audit & gap analysis</li>
+                <li>Advisory retainer sessions</li>
+                <li>Creative direction consultation</li>
+                <li>Fractional creative leadership</li>
+                <li>Team coaching & workshops</li>
+                <li>On-demand strategic support</li>
+              </ul>
+            </div>
+            <div class="acc-meta">
+              <div class="acc-meta-item">
+                <div class="acc-meta-label">Typical Timeline</div>
+                <div class="acc-meta-val">Flexible / Retainer</div>
+              </div>
+              <div class="acc-meta-item">
+                <div class="acc-meta-label">Best For</div>
+                <div class="acc-meta-val">Founders, CMOs, in-house creative teams</div>
+              </div>
+              <div class="acc-meta-item">
+                <div class="acc-meta-label">Starting From</div>
+                <div class="acc-meta-val">Custom Scoped</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═════════════════ TIERS -->
+  <section class="tiers">
+    <div class="tiers-header reveal">
+      <div>
+        <p class="section-eyebrow">↳ How We Engage</p>
+        <h2 class="section-heading" style="color:var(--cream)">Ways to <span class="accent">Work With Us</span></h2>
+      </div>
+      <p class="tiers-subhead">We don't do one-size-fits-all. Every engagement is scoped to your goals, timeline, and budget.</p>
+    </div>
+
+    <div class="tiers-grid">
+      <div class="tier-card reveal">
+        <div class="tier-badge">Focused</div>
+        <span class="tier-icon">◎</span>
+        <div class="tier-name">Sprint</div>
+        <p class="tier-tagline">Fast, focused, and built for one specific challenge. Ideal when you know exactly what you need.</p>
+        <ul class="tier-features">
+          <li>Single service scope</li>
+          <li>2–6 week delivery window</li>
+          <li>Dedicated project lead</li>
+          <li>2 rounds of revisions</li>
+          <li>Clear brief & outcomes required</li>
+        </ul>
+        <a href="#contact" class="tier-cta">Enquire →</a>
+        <div class="tier-bg-num">01</div>
+      </div>
+
+      <div class="tier-card featured-tier reveal reveal-delay-1">
+        <div class="tier-badge">Most Popular</div>
+        <span class="tier-icon">◈</span>
+        <div class="tier-name">Project</div>
+        <p class="tier-tagline">Our most common engagement — a full end-to-end project with discovery, strategy, and delivery.</p>
+        <ul class="tier-features">
+          <li>Multi-service scope</li>
+          <li>Full discovery process included</li>
+          <li>Dedicated team of 3–5</li>
+          <li>Weekly progress check-ins</li>
+          <li>Unlimited revisions within scope</li>
+          <li>Post-launch support included</li>
+        </ul>
+        <a href="#contact" class="tier-cta">Start a Conversation →</a>
+        <div class="tier-bg-num">02</div>
+      </div>
+
+      <div class="tier-card reveal reveal-delay-2">
+        <div class="tier-badge">Ongoing</div>
+        <span class="tier-icon">◉</span>
+        <div class="tier-name">Retainer</div>
+        <p class="tier-tagline">For brands who want True Chaos on their team permanently — consistent creative output at full pace.</p>
+        <ul class="tier-features">
+          <li>Monthly service allocation</li>
+          <li>Priority response & turnaround</li>
+          <li>Dedicated creative director</li>
+          <li>Quarterly strategy reviews</li>
+          <li>Access to all service areas</li>
+          <li>Flexible scope month-to-month</li>
+        </ul>
+        <a href="#contact" class="tier-cta">Enquire →</a>
+        <div class="tier-bg-num">03</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═════════════════ TESTIMONIALS -->
+  <section class="testimonials">
+    <div class="testimonials-header reveal">
+      <p class="section-eyebrow">↳ Client Voices</p>
+      <h2 class="section-heading">What They <span class="accent">Say</span></h2>
+    </div>
+
+    <div class="testimonials-track">
+
+      <div class="testi-card reveal">
+        <span class="testi-quote-mark">"</span>
+        <p class="testi-text">True Chaos took our rebrand further than we imagined possible. They pushed us out of our comfort zone at every turn — and the result is a brand that genuinely feels like us, but the version of us we always wanted to be.</p>
+        <div class="testi-divider"></div>
+        <div class="testi-author">
+          <div class="testi-avatar">AO</div>
+          <div>
+            <div class="testi-name">Adeola Okonkwo</div>
+            <div class="testi-role">Founder, Obsidian Collective</div>
+          </div>
+        </div>
+        <div class="testi-stars">★★★★★</div>
+      </div>
+
+      <div class="testi-card reveal reveal-delay-1">
+        <span class="testi-quote-mark">"</span>
+        <p class="testi-text">The campaign they built for our launch hit differently. Strategy, creative, execution — all at the same level. We had 48 hours of sell-out stock and coverage we couldn't have paid for. Genuinely outstanding work.</p>
+        <div class="testi-divider"></div>
+        <div class="testi-author">
+          <div class="testi-avatar">KD</div>
+          <div>
+            <div class="testi-name">Kwame Darko</div>
+            <div class="testi-role">CEO, Velo Sports</div>
+          </div>
+        </div>
+        <div class="testi-stars">★★★★★</div>
+      </div>
+
+      <div class="testi-card reveal reveal-delay-2">
+        <span class="testi-quote-mark">"</span>
+        <p class="testi-text">Working with True Chaos feels like having a world-class creative team inside your company. They understand the business, care about the outcome, and make you feel like you're their only client. We're never going anywhere else.</p>
+        <div class="testi-divider"></div>
+        <div class="testi-author">
+          <div class="testi-avatar">ZI</div>
+          <div>
+            <div class="testi-name">Zainab Ibrahim</div>
+            <div class="testi-role">CMO, Nova Tech Africa</div>
+          </div>
+        </div>
+        <div class="testi-stars">★★★★★</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ═════════════════ FINAL CTA -->
+  <section class="services-cta" id="contact">
+    <div class="cta-left reveal">
+      <p class="cta-eyebrow">↳ Ready to Begin</p>
+      <h2 class="cta-heading">
+        Let's Build<br>
+        Something<br>
+        <em>Fearless.</em>
+      </h2>
+      <p class="cta-body">Tell us what you're building. We'll tell you exactly how we'd approach it — no obligation, no jargon, just an honest conversation about what's possible.</p>
+    </div>
+
+    <div class="cta-right reveal reveal-delay-2">
+      <a href="mailto:hello@truechaos.studio" class="cta-contact-item">
+        <div>
+          <div class="cta-contact-label">Email Us</div>
+          <div class="cta-contact-val">hello@truechaos.studio</div>
+        </div>
+        <span class="cta-contact-arrow">↗</span>
+      </a>
+      <a href="tel:+2341234567890" class="cta-contact-item">
+        <div>
+          <div class="cta-contact-label">Call Us</div>
+          <div class="cta-contact-val">+234 123 456 7890</div>
+        </div>
+        <span class="cta-contact-arrow">↗</span>
+      </a>
+      <a href="truechaos-work.html" class="cta-contact-item">
+        <div>
+          <div class="cta-contact-label">See Our Work First</div>
+          <div class="cta-contact-val">View Portfolio →</div>
+        </div>
+        <span class="cta-contact-arrow">↗</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-wordmark-wrap">
+      <span class="footer-wordmark">TRUE <strong>CHAOS</strong></span>
+    </div>
+    <div class="footer-main">
+      <div class="footer-col">
+        <p class="footer-col-label">About the Studio</p>
+        <p class="footer-about-text">True Chaos is a creative and marketing studio built for brands that refuse to blend in. We craft bold identities, campaigns, and experiences that leave a mark.</p>
+        <div class="footer-socials">
+          <a href="#" class="footer-social">IG</a>
+          <a href="#" class="footer-social">LI</a>
+          <a href="#" class="footer-social">TW</a>
+          <a href="#" class="footer-social">BE</a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-label">Pages</p>
+        <ul class="footer-links">
+          <li><a href="truechaos-hero.html">Home</a></li>
+          <li><a href="truechaos-work.html">Our Work</a></li>
+          <li><a href="truechaos-about.html">The Studio</a></li>
+          <li><a href="#">Services</a></li>
+          <li><a href="#">Journal</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-label">Services</p>
+        <ul class="footer-links">
+          <li><a href="#">Brand Identity</a></li>
+          <li><a href="#">Marketing Campaigns</a></li>
+          <li><a href="#">Digital Design</a></li>
+          <li><a href="#">Brand Strategy</a></li>
+          <li><a href="#">Content Creation</a></li>
+          <li><a href="#">Brand Consulting</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <p class="footer-col-label">Contact</p>
+        <div class="footer-contact-item">
+          <div class="footer-contact-label">Email</div>
+          <div class="footer-contact-val">hello@truechaos.studio</div>
+        </div>
+        <div class="footer-contact-item">
+          <div class="footer-contact-label">Phone</div>
+          <div class="footer-contact-val">+234 123 456 7890</div>
+        </div>
+        <div class="footer-contact-item">
+          <div class="footer-contact-label">Based In</div>
+          <div class="footer-contact-val">Lagos, Nigeria<br>Working Worldwide</div>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copyright">© 2025 <span>True Chaos</span> Creative Studio. All rights reserved.</p>
+      <div class="footer-legal">
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Use</a>
+      </div>
+      <button class="footer-back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑ Back to Top</button>
+    </div>
+  </footer>
+
+  <script>
+    /* Cursor */
+    const cursor=document.getElementById('cursor');
+    const ring=document.getElementById('cursorRing');
+    let mx=0,my=0,rx=0,ry=0;
+    document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cursor.style.left=mx+'px';cursor.style.top=my+'px'});
+    (function loop(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop)})();
+    document.querySelectorAll('a,button').forEach(el=>{
+      el.addEventListener('mouseenter',()=>{cursor.style.width='16px';cursor.style.height='16px';ring.style.width='48px';ring.style.height='48px';ring.style.borderColor='rgba(179,48,24,.85)'});
+      el.addEventListener('mouseleave',()=>{cursor.style.width='10px';cursor.style.height='10px';ring.style.width='32px';ring.style.height='32px';ring.style.borderColor='rgba(179,48,24,.5)'});
+    });
+
+    /* Scroll reveal */
+    const obs=new IntersectionObserver(e=>{e.forEach(en=>{if(en.isIntersecting)en.target.classList.add('visible')})},{threshold:.1});
+    document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+    /* Accordion */
+    document.querySelectorAll('.acc-header').forEach(header=>{
+      header.addEventListener('click',()=>{
+        const item=header.closest('.acc-item');
+        const panel=item.querySelector('.acc-panel');
+        const isOpen=item.classList.contains('open');
+
+        // Close all
+        document.querySelectorAll('.acc-item').forEach(i=>{
+          i.classList.remove('open');
+          i.querySelector('.acc-panel').style.maxHeight='0';
+        });
+
+        // Open clicked if was closed
+        if(!isOpen){
+          item.classList.add('open');
+          panel.style.maxHeight=panel.scrollHeight+'px';
+        }
+      });
+    });
+
+    // Open first by default
+    const firstPanel=document.querySelector('.acc-item.open .acc-panel');
+    if(firstPanel) firstPanel.style.maxHeight=firstPanel.scrollHeight+'px';
+  </script>
+</body>
+</html>
